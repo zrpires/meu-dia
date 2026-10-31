@@ -1,34 +1,32 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import {useEffect,useState} from 'react';
+import type {AppState} from './types';
+import {seedState} from './data';
 
-export function useStoredState<T>(key: string, initial: T | (() => T)): [T, Dispatch<SetStateAction<T>>] {
-  const [value, setValue] = useState<T>(() => {
-    try {
-      const raw = localStorage.getItem(key);
-      if (raw !== null) return JSON.parse(raw) as T;
-    } catch {
-      // If storage is malformed, fall back to the initial value.
-    }
-    return typeof initial === 'function' ? (initial as () => T)() : initial;
-  });
+export const STORAGE_KEY='meu-dia-v3-state';
 
-  useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(value));
-  }, [key, value]);
+function read<T>(key:string,fallback:T):T{try{const raw=localStorage.getItem(key);return raw?JSON.parse(raw) as T:fallback}catch{return fallback}}
 
-  return [value, setValue];
+export function loadInitialState():AppState{
+ const saved=read<AppState|null>(STORAGE_KEY,null);
+ if(saved?.version===3)return {...seedState,...saved};
+ const migrated:AppState={...seedState,
+  events:read('meu-dia-v2-events',seedState.events),
+  eventCompletions:read('meu-dia-v2-event-completions',{}),
+  books:read('meu-dia-v2-books',[]),readingLogs:read('meu-dia-v2-reading-logs',[]),
+  workoutPlans:read('meu-dia-v2-workout-plans',seedState.workoutPlans),workoutLogs:read('meu-dia-v2-workout-logs',[]),
+  subjects:read('meu-dia-v2-subjects',seedState.subjects),studyLogs:read('meu-dia-v2-study-logs',[]),
+  habits:read('meu-dia-v2-habits',seedState.habits),habitCompletions:read('meu-dia-v2-habit-completions',{}),
+  goals:read('meu-dia-v2-goals',seedState.goals),dailyNotes:read('meu-dia-v2-daily-notes',{})
+ };
+ return migrated;
 }
 
-export const uid = () =>
-  typeof crypto !== 'undefined' && 'randomUUID' in crypto
-    ? crypto.randomUUID()
-    : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+export function useAppState(){
+ const[state,setState]=useState<AppState>(()=>loadInitialState());
+ useEffect(()=>{localStorage.setItem(STORAGE_KEY,JSON.stringify(state))},[state]);
+ return[state,setState] as const;
+}
 
-export const downloadTextFile = (filename: string, content: string, type = 'text/plain') => {
-  const blob = new Blob([content], { type });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
-};
+export function downloadTextFile(filename:string,content:string,type='application/json'){
+ const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;a.click();URL.revokeObjectURL(url);
+}
