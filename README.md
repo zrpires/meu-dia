@@ -1,59 +1,60 @@
 # Meu Dia — Personal OS
 
-Aplicação pessoal para organizar rotina, estudos, leitura, treinos, metas, hábitos e agenda em um único lugar.
+Aplicação pessoal em React + TypeScript para organizar rotina, calendário, foco, vestibular UEM, biblioteca, academia, esportes, alimentação, sono, projetos, carreira, finanças, metas, XP/streaks, dashboard anual e revisão semanal.
 
-## Recursos da V2
-
-- Dashboard diário com progresso e hábitos
-- Calendário mensal com eventos e recorrência
-- Biblioteca de livros com páginas lidas e histórico
-- Estudos por disciplina, meta semanal e sessões
-- Fichas de treino, exercícios, cargas e histórico
-- Metas e hábitos com acompanhamento semanal
-- Estatísticas dos últimos dias
-- Notas diárias
-- Backup e restauração em JSON
-- Exportação do calendário em `.ics`
-- Layout responsivo para desktop e celular
-- Persistência local via `localStorage`
-
-## Rodar localmente
+## Rodar
 
 ```bash
 npm install
 npm run dev
 ```
 
-Abra o endereço exibido pelo Vite, normalmente `http://localhost:5173`.
+## Recursos externos
 
-## Atualizar uma cópia já clonada
+- Livros: Open Library Search/Covers, com fallback de busca para Google Books.
+- Exercícios: catálogo público da API wger.
+- Nuvem: Supabase opcional. Sem configuração, o app continua funcional em `localStorage`.
+- PWA: `vite-plugin-pwa` configurado para build e instalação quando publicado em HTTPS.
 
-```bash
-git pull origin main
-npm install
-npm run dev
-```
+## Supabase
 
-## Build de produção
+1. Crie um projeto no Supabase.
+2. Rode `supabase/schema.sql` no SQL Editor.
+3. Copie `.env.example` para `.env.local`.
+4. Preencha `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY`.
+5. Reinicie `npm run dev`.
+
+A tabela `app_state` usa RLS e cada usuário só lê/escreve a própria linha.
+
+## O que a V3 inclui
+
+- Dashboard diário, agenda e hábitos.
+- Calendário recorrente e exportação `.ics`.
+- Pomodoro/foco com histórico.
+- Estudos por matéria e horas semanais.
+- Módulo UEM: conteúdos, questões, acertos, redações e simulados.
+- Biblioteca com busca externa e capas reais.
+- Academia com fichas, busca externa de exercícios, imagens e histórico de cargas.
+- Corrida, bike, futebol e distância acumulada.
+- Nutrição, água, refeições, proteína e calorias opcionais.
+- Sono, duração e qualidade.
+- Projetos de portfólio, tarefas, tecnologias e horas.
+- Pipeline de candidaturas e entrevistas.
+- Finanças pessoais.
+- Metas e hábitos customizáveis.
+- XP, níveis e streaks.
+- Dashboard anual estilo “Wrapped”.
+- Revisão semanal.
+- Backup/importação JSON.
+- PWA e sincronização opcional via Supabase.
+
+## Build
 
 ```bash
 npm run build
 npm run preview
 ```
 
-## Dados
+## Privacidade
 
-A V2 usa novas chaves de `localStorage` iniciadas por `meu-dia-v2-`, portanto os dados antigos da V1 não são apagados automaticamente. Em **Configurações** você pode exportar um backup completo da V2.
-
-## Próximos passos sugeridos
-
-- Supabase para autenticação e sincronização entre dispositivos
-- PWA instalável com notificações
-- Pomodoro integrado às sessões de estudo
-- Sincronização bidirecional com Google Calendar por backend seguro
-- Nutrição, hidratação e planejamento de refeições
-- Projetos, carreira e candidaturas
-
-## Stack
-
-React · TypeScript · Vite · Lucide React
+Não comite `.env.local`. Dados locais ficam no navegador; o envio ao Supabase é manual pela tela Configurações.
