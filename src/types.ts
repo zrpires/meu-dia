@@ -1,108 +1,41 @@
-export type View = 'today' | 'calendar' | 'study' | 'library' | 'workouts' | 'goals' | 'stats' | 'settings';
-
-export type EventCategory = 'study' | 'workout' | 'reading' | 'meal' | 'work' | 'personal' | 'sleep';
-export type RepeatRule = 'none' | 'daily' | 'weekdays' | 'weekly';
-
-export type CalendarEvent = {
-  id: string;
-  title: string;
-  date: string;
-  start: string;
-  end: string;
-  category: EventCategory;
-  repeat: RepeatRule;
-  notes?: string;
+export type View = 'today'|'calendar'|'focus'|'study'|'uem'|'library'|'workouts'|'sports'|'nutrition'|'sleep'|'projects'|'career'|'finance'|'goals'|'yearly'|'review'|'settings';
+export type EventCategory = 'study'|'workout'|'reading'|'meal'|'work'|'personal'|'sleep'|'sport';
+export type RepeatRule = 'none'|'daily'|'weekdays'|'weekly';
+export type CalendarEvent = {id:string;title:string;date:string;start:string;end:string;category:EventCategory;repeat:RepeatRule;notes?:string};
+export type BookStatus = 'quero-ler'|'lendo'|'concluido';
+export type Book = {id:string;title:string;author:string;totalPages:number;currentPage:number;status:BookStatus;targetDate?:string;rating?:number;notes?:string;coverUrl?:string;externalId?:string;isbn?:string};
+export type BookSearchResult = {externalId:string;title:string;author:string;pages:number;coverUrl?:string;isbn?:string;year?:number};
+export type ReadingLog = {id:string;bookId:string;date:string;pages:number;minutes:number;notes?:string};
+export type Exercise = {id:string;name:string;sets:number;reps:string;load:string;restSeconds:number;muscle?:string;equipment?:string;imageUrl?:string;externalId?:string};
+export type ExerciseSearchResult = {externalId:string;name:string;muscle:string;equipment:string;imageUrl?:string;description?:string};
+export type WorkoutPlan = {id:string;name:string;days:string[];exercises:Exercise[]};
+export type WorkoutExerciseLog = {exerciseId:string;name:string;sets:number;reps:string;load:number};
+export type WorkoutLog = {id:string;workoutId:string;date:string;duration:number;notes?:string;exercises?:WorkoutExerciseLog[]};
+export type StudySubject = {id:string;name:string;weeklyGoalMinutes:number;color?:string};
+export type StudyLog = {id:string;subjectId:string;date:string;minutes:number;topic:string;notes?:string};
+export type FocusLog = {id:string;date:string;minutes:number;label:string;subjectId?:string};
+export type Habit = {id:string;name:string;targetPerWeek:number;category:EventCategory;xp:number};
+export type Goal = {id:string;title:string;current:number;target:number;unit:string;deadline?:string};
+export type SportType = 'corrida'|'bike'|'futebol'|'caminhada'|'outro';
+export type SportLog = {id:string;date:string;type:SportType;duration:number;distance?:number;notes?:string};
+export type MealType = 'cafe'|'almoco'|'lanche'|'jantar'|'outro';
+export type MealLog = {id:string;date:string;type:MealType;name:string;calories?:number;protein?:number;notes?:string};
+export type WaterLog = {date:string;ml:number};
+export type SleepLog = {id:string;date:string;bedTime:string;wakeTime:string;hours:number;quality:number;notes?:string};
+export type ProjectTask = {id:string;title:string;done:boolean};
+export type ProjectStatus = 'ideia'|'andamento'|'pausado'|'concluido';
+export type PersonalProject = {id:string;name:string;description:string;status:ProjectStatus;tech:string[];hours:number;tasks:ProjectTask[];repoUrl?:string};
+export type ApplicationStatus = 'salva'|'aplicada'|'entrevista'|'teste'|'oferta'|'rejeitada';
+export type JobApplication = {id:string;company:string;role:string;date:string;status:ApplicationStatus;url?:string;notes?:string};
+export type FinanceType = 'receita'|'despesa';
+export type FinanceEntry = {id:string;date:string;type:FinanceType;category:string;description:string;amount:number};
+export type UemTopicStatus = 'nao-iniciado'|'estudando'|'revisao'|'dominado';
+export type UemTopic = {id:string;subject:string;topic:string;status:UemTopicStatus;questions:number;correct:number;priority:1|2|3};
+export type EssayLog = {id:string;date:string;theme:string;score:number;notes?:string};
+export type MockExam = {id:string;date:string;score:number;maxScore:number;correct:number;total:number;notes?:string};
+export type WeeklyReview = {weekStart:string;rating:number;wins:string;challenges:string;nextFocus:string};
+export type AppState = {
+ version:3; events:CalendarEvent[]; eventCompletions:Record<string,boolean>; books:Book[]; readingLogs:ReadingLog[]; workoutPlans:WorkoutPlan[]; workoutLogs:WorkoutLog[]; subjects:StudySubject[]; studyLogs:StudyLog[]; focusLogs:FocusLog[]; habits:Habit[]; habitCompletions:Record<string,boolean>; goals:Goal[]; dailyNotes:Record<string,string>;
+ sports:SportLog[]; meals:MealLog[]; water:WaterLog[]; sleep:SleepLog[]; projects:PersonalProject[]; applications:JobApplication[]; finances:FinanceEntry[]; uemTopics:UemTopic[]; essays:EssayLog[]; mocks:MockExam[]; weeklyReviews:WeeklyReview[];
 };
-
-export type BookStatus = 'quero-ler' | 'lendo' | 'concluido';
-export type Book = {
-  id: string;
-  title: string;
-  author: string;
-  totalPages: number;
-  currentPage: number;
-  status: BookStatus;
-  targetDate?: string;
-  rating?: number;
-  notes?: string;
-};
-
-export type ReadingLog = {
-  id: string;
-  bookId: string;
-  date: string;
-  pages: number;
-  minutes: number;
-};
-
-export type Exercise = {
-  id: string;
-  name: string;
-  sets: number;
-  reps: string;
-  load: string;
-  restSeconds: number;
-};
-
-export type WorkoutPlan = {
-  id: string;
-  name: string;
-  days: string[];
-  exercises: Exercise[];
-};
-
-export type WorkoutLog = {
-  id: string;
-  workoutId: string;
-  date: string;
-  duration: number;
-  notes?: string;
-};
-
-export type StudySubject = {
-  id: string;
-  name: string;
-  weeklyGoalMinutes: number;
-};
-
-export type StudyLog = {
-  id: string;
-  subjectId: string;
-  date: string;
-  minutes: number;
-  topic: string;
-  notes?: string;
-};
-
-export type Habit = {
-  id: string;
-  name: string;
-  targetPerWeek: number;
-  category: EventCategory;
-};
-
-export type Goal = {
-  id: string;
-  title: string;
-  current: number;
-  target: number;
-  unit: string;
-  deadline?: string;
-};
-
-export type AppBackup = {
-  version: 2;
-  exportedAt: string;
-  events: CalendarEvent[];
-  eventCompletions: Record<string, boolean>;
-  books: Book[];
-  readingLogs: ReadingLog[];
-  workoutPlans: WorkoutPlan[];
-  workoutLogs: WorkoutLog[];
-  subjects: StudySubject[];
-  studyLogs: StudyLog[];
-  habits: Habit[];
-  habitCompletions: Record<string, boolean>;
-  goals: Goal[];
-  dailyNotes: Record<string, string>;
-};
+export type AppBackup = {version:3;exportedAt:string;data:AppState};
