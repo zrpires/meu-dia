@@ -2,8 +2,26 @@ import {defineConfig} from 'vite';
 import react from '@vitejs/plugin-react';
 import {VitePWA} from 'vite-plugin-pwa';
 
-export default defineConfig({plugins:[react(),VitePWA({
- registerType:'autoUpdate',
- includeAssets:['icon.svg'],
- manifest:{name:'Meu Dia — Personal OS',short_name:'Meu Dia',description:'Rotina, estudos, treino, leitura, carreira e vida em um único painel.',theme_color:'#07111f',background_color:'#07111f',display:'standalone',start_url:'/',icons:[{src:'/icon.svg',sizes:'any',type:'image/svg+xml',purpose:'any maskable'}]}
-})]});
+const githubPagesBase=process.env.GITHUB_ACTIONS?'/meu-dia/':'/';
+
+export default defineConfig({
+ base:githubPagesBase,
+ plugins:[
+  react(),
+  VitePWA({
+   registerType:'autoUpdate',
+   includeAssets:['icon.svg'],
+   manifest:{
+    name:'Meu Dia — Personal OS',
+    short_name:'Meu Dia',
+    description:'Rotina, estudos, treino, leitura, carreira e vida em um único painel.',
+    theme_color:'#07111f',
+    background_color:'#07111f',
+    display:'standalone',
+    start_url:'./',
+    scope:'./',
+    icons:[{src:'icon.svg',sizes:'any',type:'image/svg+xml',purpose:'any maskable'}]
+   }
+  })
+ ]
+});
